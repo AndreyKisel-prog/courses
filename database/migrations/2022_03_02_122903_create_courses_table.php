@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('description');
             $table->integer('price');
             $table->timestamps();
-
         });
     }
 
