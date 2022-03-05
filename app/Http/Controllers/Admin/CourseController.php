@@ -28,7 +28,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.courses.create');
     }
 
     /**
@@ -39,7 +39,15 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $course = new Course;
+        $course->name = $request->name;
+        $course->level = $request->level;
+        $course->price = $request->price;
+        $course->description = $request->description;
+        $course->category = $request->category;
+        $course->day_duration = $request->day_duration;
+        $course->save();
+        return redirect()->back()->withSuccess('New course has been added successfully');
     }
 
     /**
@@ -61,7 +69,8 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $course = Course::find($id);
+        return view('admin.courses.edit', compact('course'));
     }
 
     /**
@@ -73,7 +82,15 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $course = Course::find($id);
+        $course->name = $request->name;
+        $course->level = $request->level;
+        $course->price = $request->price;
+        $course->description = $request->description;
+        $course->category = $request->category;
+        $course->day_duration = $request->day_duration;
+        $course->save();
+        return redirect()->back()->withSuccess('The course has been edited successfully');
     }
 
     /**
@@ -84,6 +101,8 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Course::destroy($id);
+        return redirect()->back()->withSuccess('The course has been deleted successfully');
+
     }
 }

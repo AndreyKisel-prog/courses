@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class MainController extends Controller
 {
     public function show()
     {

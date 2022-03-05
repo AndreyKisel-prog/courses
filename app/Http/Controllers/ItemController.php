@@ -1,25 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Course;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($course_id)
     {
-        $users = User::with('roles')->orderBy('created_at', 'DESC')->get();
-        return view('admin.users.index', [
-            'users' => $users,
-             ]);
+        $course = Course::find($course_id);
+
+        return view('customer.item', compact('course'));
     }
 
     /**
@@ -40,7 +39,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $user->courses;
+        $user->courses()->attach(
+            $request->course_id
+        );
+
+
+        return redirect()->back()->withSuccess('The course saved');
     }
 
     /**
@@ -62,14 +68,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $roles = Role::pluck('name')->filter(function($value, $key){
-            return $value != 'admin';
-});
-        $user = User::find($id);
-        return view('admin.users.edit', [
-            'user' => $user,
-            'roles' =>$roles
-        ]);
+        //
     }
 
     /**
@@ -81,12 +80,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->assignRole($request->role);
-        $user->save();
-        return redirect()->back()->withSuccess('User has been updated');
+        //
     }
 
     /**
@@ -97,7 +91,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        return redirect()->back()->withSuccess('User has been deleted successfully');
+        //
     }
 }
