@@ -19,40 +19,9 @@ class UserController extends Controller
         $users = User::with('roles')->orderBy('created_at', 'DESC')->get();
         return view('admin.users.index', [
             'users' => $users,
-             ]);
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -62,13 +31,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $roles = Role::pluck('name')->filter(function($value, $key){
+        $roles = Role::pluck('name')->filter(function ($value, $key) {
             return $value != 'admin';
-});
+        });
         $user = User::find($id);
         return view('admin.users.edit', [
             'user' => $user,
-            'roles' =>$roles
+            'roles' => $roles
         ]);
     }
 
@@ -81,6 +50,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|max:50',
+            'email' => 'required|max:50',
+        ]);
+
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Moderator;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CourseController extends Controller
+class ModeratorCourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::orderBy('created_at', 'DESC')->get();
-        return view('admin.courses.index', [
-            'courses'=> $courses,
+        return view('moderator.courses.index', [
+            'courses' => $courses,
         ]);
     }
 
@@ -28,7 +28,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        return view('moderator.courses.create');
     }
 
     /**
@@ -68,7 +68,7 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = Course::find($id);
-        return view('admin.courses.edit', compact('course'));
+        return view('moderator.courses.edit', compact('course'));
     }
 
     /**
@@ -80,7 +80,6 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $request->validate([
             'name' => 'required|max:50',
             'level' => 'required|max:50',
@@ -89,7 +88,6 @@ class CourseController extends Controller
             'category' => 'required|max:20',
             'day_duration' => 'required|max:4',
         ]);
-
         $course = Course::find($id);
         $course->name = $request->name;
         $course->level = $request->level;
@@ -99,18 +97,5 @@ class CourseController extends Controller
         $course->day_duration = $request->day_duration;
         $course->save();
         return redirect()->back()->withSuccess('The course has been edited successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        Course::destroy($id);
-        return redirect()->back()->withSuccess('The course has been deleted successfully');
-
     }
 }

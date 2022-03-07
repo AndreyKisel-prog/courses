@@ -4,20 +4,13 @@
 
 @section('content')
 
+
+    @include("components.validation_errors_messages")
     <div class="p-2 container">
         <div class="card card-info mt-4">
             <div class="card-header">
                 <h2 class="card-title">edit user: id({{ $user->id }})</h2>
             </div>
-
-            @if (session('success'))
-                <div class="alert alert-success my-3" role="alert">
-                    <span aria-hidden="true">{{ session('success') }}</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        X
-                    </button>
-                </div>
-            @endif
             <!-- /.card-header -->
             <!-- form start -->
             <form action="{{ route('users.update', $user->id) }}" method="POST" class="form-horizontal">

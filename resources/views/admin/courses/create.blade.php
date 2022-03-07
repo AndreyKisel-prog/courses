@@ -10,17 +10,11 @@
                 <h2 class="card-title">Add new course: </h2>
             </div>
 
-            @if (session('success'))
-                <div class="alert alert-success my-3" role="alert">
-                    <span aria-hidden="true">{{ session('success') }}</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        X
-                    </button>
-                </div>
-            @endif
+        @include('components.validation_errors_messages')
+
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{ route('courses.store') }}" method="POST" class="form-horizontal">
+            <form action="{{ route('admin.courses.store') }}" method="POST" class="form-horizontal">
                 @csrf
                 <div class="card-body">
 

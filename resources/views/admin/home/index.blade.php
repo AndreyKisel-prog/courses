@@ -39,7 +39,7 @@
                         <h1>Courses table</h1>
                         <p>All courses description</p>
                         <p>Create, delete, edit description of course</p>
-                        <p><a class="btn btn-lg btn-warning" href="{{route('courses.index')}}">Go to courses table</a></p>
+                        <p><a class="btn btn-lg btn-warning" href="{{route('admin.courses.index')}}">Go to courses table</a></p>
                     </div>
                 </div>
             </div>
