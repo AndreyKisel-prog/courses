@@ -3,7 +3,7 @@
     @include("components.alert")
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header text-center">{{ __('You are welcome!') }}</div>
                     <div class="card-body text-center">
@@ -12,10 +12,16 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        {{ __('Status: you are logged in') }}
+                        <div class="text-start">
+                            <div>Your name: {{ Auth::user()->name }}</div>
+                            {{ __('Status: you are logged in') }}
+                            <div>Your email: {{ Auth::user()->email }}</div>
+                            <div> Your role: {{ Auth::user()->getRoleNames()[0] }}</div>
+                        </div>
+
                         <div class="container row">
                             @if (Auth::user()->getRoleNames()[0] == 'admin')
-                                <div class="card-body my-5 col-md-6 ">
+                                <div class="card-body my-5 col-md-3 ">
                                     <a href="{{ route('show') }}" class="alert alert-success text-decoration-none"
                                         role="alert">
                                         Let's go to admin's cabinet
@@ -23,14 +29,22 @@
                                 </div>
                             @endif
                             @if (Auth::user()->getRoleNames()[0] == 'moderator')
-                                <div class="card-body my-5 col-md-6 ">
+                                <div class="card-body my-5 col-md-3 ">
                                     <a href="{{ route('main') }}" class="alert alert-success text-decoration-none"
                                         role="alert">
                                         Let's go to moderators's cabinet
                                     </a>
                                 </div>
                             @endif
-                            <div class="card-body my-5 col-md-6 ">
+                            <div class="card-body my-5 col-md-3 ">
+                                <a href="{{ route('personal.edit') }}" class="alert alert-success text-decoration-none"
+                                    role="alert">
+                                    Change yours personal data or password
+                                </a>
+                            </div>
+
+
+                            <div class="card-body my-5 col-md-3 ">
                                 <a href="{{ route('shop') }}" class="alert alert-success text-decoration-none"
                                     role="alert">
                                     Show all courses

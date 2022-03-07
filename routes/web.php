@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Customer\ItemController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -10,6 +9,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Customer\ItemController;
+use App\Http\Controllers\Customer\PrivateController;
 use App\Http\Controllers\Moderator\ModeratorMainController;
 use App\Http\Controllers\Moderator\ModeratorCourseController;
 
@@ -60,7 +61,8 @@ Route::group([
 Route::group([
     'middleware' => ['auth'],
 ], function(){
-    Route::post('/order/{id}', [CustomerController::class, 'destroy'])->name('order.destroy');
+    Route::get('/personal', [PrivateController::class, 'edit'])->name('personal.edit');
+    Route::put('/personal', [PrivateController::class, 'update'])->name('personal.update');
     Route::get('/shop', [PresentationController::class, 'index'])->name('shop');
     Route::get('/{course_id}', [ItemController::class, 'index'])->name('item.index');
     Route::post('/{course_id}', [ItemController::class, 'store'])->name('item.store');
