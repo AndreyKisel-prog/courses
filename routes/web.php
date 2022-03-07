@@ -62,7 +62,7 @@ Route::group([
     'middleware' => ['auth'],
 ], function(){
     Route::get('/personal', [PrivateController::class, 'edit'])->name('personal.edit');
-    Route::put('/personal', [PrivateController::class, 'update'])->name('personal.update');
+    Route::put('/personal', [PrivateController::class, 'updatePersonalData'])->name('personal.update');
     Route::get('/shop', [PresentationController::class, 'index'])->name('shop');
     Route::get('/{course_id}', [ItemController::class, 'index'])->name('item.index');
     Route::post('/{course_id}', [ItemController::class, 'store'])->name('item.store');

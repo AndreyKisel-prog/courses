@@ -31,22 +31,38 @@ class PrivateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function updatePersonalData(Request $request)
     {
         try {
+            $passwordRules = ($request->password) !== null
+                ? 'sometimes|nullable|string|min:8|max:50' : '';
+            $emailRules = ($request->email) !== null
+                ? 'string|email|max:255|unique:users' : '';
+            $nameRules = ($request->name) !== null
+                ? 'string|max:1000' : '';
             $request->validate([
-                'name' => 'required|max:50',
-                'email' => 'required|max:50',
-                'password' => 'required|max:50',
+                'name' => $nameRules,
+                'email' => $emailRules,
+                'password' => $passwordRules
             ]);
             $user = User::findOrFail(Auth::user()->id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
+            $message = 'nothing to update';
+            if (($request->name !== $user->name) && $request->name) {
+                $user->name = $request->name;
+                $message = 'Your name has been updated';
+            }
+            if (($user->email !== $request->email) && $request->email) {
+                $user->email = $request->email;
+                $message = 'Your email has been updated';
+            }
+            if ($request->password) {
+                $user->password = Hash::make($request->password);
+                $message = 'Your password has been updated';
+            }
             $user->save();
-            return redirect()->back()->withSuccess('Your personal data has been updated');
+            return redirect()->back()->withSuccess($message);
         } catch (QueryException $exception) {
-            return redirect()->back()->withError('Something went wrong. Try again');
+            return redirect()->back()->withError($exception->getMessage());
         };
     }
 }

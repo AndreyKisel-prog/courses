@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
@@ -22,7 +24,6 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -55,19 +56,42 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|max:50',
-            'email' => 'required|max:50',
-        ]);
-
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->removeRole($user->getRoleNames()->first());
-        $user->assignRole($request->role);
-
-        $user->save();
-        return redirect()->back()->withSuccess('User has been updated');
+        try {
+            $passwordRules = ($request->password) !== null
+                ? 'sometimes|nullable|string|min:8|max:50' : '';
+            $emailRules = ($request->email) !== null
+                ? 'string|email|max:255|unique:users' : '';
+            $nameRules = ($request->name) !== null
+                ? 'string|max:1000' : '';
+            $request->validate([
+                'name' => $nameRules,
+                'email' => $emailRules,
+                'password' => $passwordRules
+            ]);
+            $user = User::findOrFail($id);
+            $message = 'nothing to update';
+            if (($request->name !== $user->name) && $request->name) {
+                $user->name = $request->name;
+                $message = 'User\'s name has been updated';
+            }
+            if (($user->email !== $request->email) && $request->email) {
+                $user->email = $request->email;
+                $message = 'User\'s email has been updated';
+            }
+            if ($request->password) {
+                $user->password = Hash::make($request->password);
+                $message = 'User\'s password has been updated';
+            }
+            if ($request->role) {
+                $user->removeRole($user->getRoleNames()->first());
+                $user->assignRole($request->role);
+                $message = 'User\'s role has been updated';
+            }
+            $user->save();
+            return redirect()->back()->withSuccess($message);
+        } catch (QueryException $exception) {
+            return redirect()->back()->withError($exception->getMessage());
+        };
     }
 
     /**

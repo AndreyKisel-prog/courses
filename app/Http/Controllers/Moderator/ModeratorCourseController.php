@@ -85,12 +85,12 @@ class ModeratorCourseController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|max:50',
-            'level' => 'required|max:50',
-            'price' => 'required|max:10',
-            'description' => 'required|max:1000',
-            'category' => 'required|max:20',
-            'day_duration' => 'required|max:4',
+            'name' => 'required|string|max:250',
+            'level' => 'required|string|max:50',
+            'price' => 'required|integer|max:10',
+            'description' => 'required|string|max:1000',
+            'category' => 'required|string|max:20',
+            'day_duration' => 'required|integer|max:4',
         ]);
         $course = Course::find($id);
         $course->name = $request->name;
