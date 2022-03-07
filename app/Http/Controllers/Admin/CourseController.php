@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CourseController extends Controller
 {
@@ -67,8 +68,12 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        $course = Course::find($id);
-        return view('admin.courses.edit', compact('course'));
+        try{
+            $course = Course::findOrFail($id);
+            return view('admin.courses.edit', compact('course'));
+        }catch (ModelNotFoundException $exception) {
+            return redirect(route('admin.courses.index'))->withError('Course with id:  '. $id .' not found');
+        }
     }
 
     /**

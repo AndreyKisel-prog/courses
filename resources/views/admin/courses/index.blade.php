@@ -1,13 +1,7 @@
 @extends('layouts.admin.admin_layout')
-
 @section('title', 'courses: admin page')
-
 @section('content')
-
-
-
     <a href="{{ route('admin.courses.create') }}" class="mt-4 btn btn-lg btn-success">Push the button to add new course</a>
-
     <h3 class="text-center">All courses:</h3>
     <table class="table table-success table-striped table-hover mt-3 table-bordered border-primary">
         <tr>
@@ -46,7 +40,6 @@
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 </td>
-
             </tr>
         @endforeach
     </table>

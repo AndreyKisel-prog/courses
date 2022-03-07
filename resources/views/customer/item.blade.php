@@ -10,7 +10,6 @@
                     <p class="card-text">Level: {{ $course->level }}</p><br>
                     <p class="card-text">{{ $course->description }}</p>
                     <span class="card-text text-danger"><b> Price: {{ $course->price }} $</b></span><br>
-
                     <div class='container row'>
                         <div class="col-md-6">
                             <form action="{{ route('item.store', $course->id) }}" method="POST">

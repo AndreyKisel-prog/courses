@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Models\User;
+use ErrorException;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ItemController extends Controller
 {
@@ -17,9 +18,12 @@ class ItemController extends Controller
      */
     public function index($course_id)
     {
-        $course = Course::find($course_id);
-
-        return view('customer.item', compact('course'));
+        try {
+            $course = Course::findOrFail($course_id);
+            return view('customer.item', compact('course'));
+        } catch (ModelNotFoundException $exception) {
+            return redirect(route('shop'))->withError('Course with id:  '. $course_id .' not found');
+        }
     }
 
     /**
@@ -32,7 +36,6 @@ class ItemController extends Controller
     {
         $user = Auth::user();
         $courses = $user->courses;
-
         if ($courses->pluck('id')->contains($request->course_id)) {
             return redirect()->back()->withError('Error: The course had been saved early');
         } else {

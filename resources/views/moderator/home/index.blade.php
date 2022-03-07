@@ -27,6 +27,4 @@
     </button>
     </div>
     </div>
-
-
 @endsection

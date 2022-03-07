@@ -24,11 +24,7 @@ use App\Http\Controllers\Moderator\ModeratorCourseController;
 |
 */
 
-
 Auth::routes();
-
-
-
 
 Route::group([
     'prefix' => 'admin',
@@ -61,11 +57,18 @@ Route::group([
     Route::get('/', [ModeratorMainController::class, 'index'])->name('main');
 });
 
+Route::group([
+    'middleware' => ['auth'],
+], function(){
+    Route::post('/order/{id}', [CustomerController::class, 'destroy'])->name('order.destroy');
+    Route::get('/shop', [PresentationController::class, 'index'])->name('shop');
+    Route::get('/{course_id}', [ItemController::class, 'index'])->name('item.index');
+    Route::post('/{course_id}', [ItemController::class, 'store'])->name('item.store');
+    Route::delete('/{course_id}', [ItemController::class, 'destroy'])->name('item.destroy');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+});
 
-Route::post('/order/{id}', [CustomerController::class, 'destroy'])->middleware('auth')->name('order.destroy');
-Route::get('/shop', [PresentationController::class, 'index'])->middleware('auth')->name('shop');
-Route::get('/{course_id}', [ItemController::class, 'index'])->middleware('auth')->name('item.index');
-Route::post('/{course_id}', [ItemController::class, 'store'])->middleware('auth')->name('item.store');
-Route::delete('/{course_id}', [ItemController::class, 'destroy'])->middleware('auth')->name('item.destroy');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::fallback(function() {
+    return 'Hm, why did you land here somehow?';
+});

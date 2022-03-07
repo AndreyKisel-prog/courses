@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
@@ -31,14 +32,18 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $roles = Role::pluck('name')->filter(function ($value, $key) {
-            return $value != 'admin';
-        });
-        $user = User::find($id);
-        return view('admin.users.edit', [
-            'user' => $user,
-            'roles' => $roles
-        ]);
+        try {
+            $roles = Role::pluck('name')->filter(function ($value, $key) {
+                return $value != 'admin';
+            });
+            $user = User::findOrFail($id);
+            return view('admin.users.edit', [
+                'user' => $user,
+                'roles' => $roles
+            ]);
+        } catch (ModelNotFoundException $exception) {
+            return redirect(route('users.index'))->withError('User with id:  ' . $id . ' not found');
+        }
     }
 
     /**

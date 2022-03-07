@@ -1,10 +1,6 @@
 @extends('layouts.admin.admin_layout')
-
 @section('title', 'users: admin page')
-
 @section('content')
-
-
     <table class="table table-success table-striped table-hover mt-5 table-bordered border-primary">
         <tr>
             <th>#</th>
@@ -37,5 +33,4 @@
             </tr>
         @endforeach
     </table>
-
 @endsection

@@ -1,8 +1,7 @@
 @extends('layouts.presentation_layout')
-
 @section('title', 'demo')
-
 @section('content')
+@include("components.alert")
     <body>
         <h1 class='my-2 text-warning text-center'>Our courses:</h1>
         <div class="d-flex justify-content-center my-2">

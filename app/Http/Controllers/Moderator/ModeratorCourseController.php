@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Moderator;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ModeratorCourseController extends Controller
 {
@@ -47,7 +48,6 @@ class ModeratorCourseController extends Controller
             'category' => 'required|max:20',
             'day_duration' => 'required|max:4',
         ]);
-
         $course = new Course;
         $course->name = $request->name;
         $course->level = $request->level;
@@ -67,8 +67,12 @@ class ModeratorCourseController extends Controller
      */
     public function edit($id)
     {
-        $course = Course::find($id);
-        return view('moderator.courses.edit', compact('course'));
+        try{
+            $course = Course::findOrFail($id);
+            return view('moderator.courses.edit', compact('course'));
+        }catch (ModelNotFoundException $exception) {
+            return redirect(route('moderator.courses.index'))->withError('Course with id:  '. $id .' not found');
+        }
     }
 
     /**
